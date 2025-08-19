@@ -3,13 +3,13 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-web-ui-ingress
   annotations:
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: web-ui-basic-auth
-    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+   {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+   {{- end }}
 spec:
   ingressClassName: nginx
   rules:
-    - host: cloud-wallet.xfsc.dev
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /
@@ -21,5 +21,5 @@ spec:
                   number: 3000
   tls:
     - hosts:
-        - cloud-wallet.xfsc.dev
-      secretName: xfsc-wildcard
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
