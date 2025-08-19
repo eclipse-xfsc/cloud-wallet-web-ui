@@ -6,3 +6,12 @@ frontendContainer:
   imagePullPolicy: Always
   tag: main
   port: 3000
+env:
+  NEXT_PUBLIC_API_URL: "https://cloud-wallet.xfsc.dev/api"
+  NEXT_PUBLIC_ENV_URL: "https://cloud-wallet.xfsc.dev"
+  NEXT_PUBLIC_API_URL_ACCOUNT_SERVICE: "https://cloud-wallet.xfsc.dev/api/accounts"
+  NEXT_PUBLIC_API_URL_CONFIG_SERVICE: "https://cloud-wallet.xfsc.dev/api/configuration/configuration"
+  KEYCLOAK_BASE_URL: "https://auth.example.com"
+  KEYCLOAK_AUTH_URL: "https://auth.example.com"   # optional; sonst = BASE_URL
+  KEYCLOAK_REALM: "react-keycloak"
+  KEYCLOAK_CLIENT_ID: "react-keycloak"
