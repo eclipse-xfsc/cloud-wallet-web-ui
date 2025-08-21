@@ -12,9 +12,9 @@ spec:
       labels:
         app: frontend-app
     spec:
-      {{- if .ValuesfrontendContainer.imagePullSecret }}
+      {{- if .Values.frontendContainer.imagePullSecret }}
       imagePullSecrets:
-        - name: {{ .ValuesfrontendContainer.imagePullSecret }}
+        - name: {{ .Values.frontendContainer.imagePullSecret }}
       {{- end }}
       containers:
         - name: frontend-container
