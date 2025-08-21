@@ -12,10 +12,14 @@ spec:
       labels:
         app: frontend-app
     spec:
+      {{- if .ValuesfrontendContainer.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .ValuesfrontendContainer.imagePullSecret }}
+      {{- end }}
       containers:
         - name: frontend-container
           image: "{{ .Values.frontendContainer.image }}:{{ .Values.frontendContainer.tag }}"
-          imagePullPolicy: {{ .Values.frontendContainer.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.frontendContainer.imagePullPolicy }}   
           ports:
             - containerPort: {{ .Values.frontendContainer.port }}
           env:
