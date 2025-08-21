@@ -1,7 +1,8 @@
 Dockerfile
 .dockerignore
 node_modules
-deployment
+deployment/helm
+deployment/keycloak
 npm-debug.log
 README.md
 .next

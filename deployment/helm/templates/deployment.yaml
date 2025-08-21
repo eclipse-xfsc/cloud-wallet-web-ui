@@ -12,9 +12,18 @@ spec:
       labels:
         app: frontend-app
     spec:
+      {{- if .Values.frontendContainer.imagePullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.frontendContainer.imagePullSecret }}
+      {{- end }}
       containers:
         - name: frontend-container
           image: "{{ .Values.frontendContainer.image }}:{{ .Values.frontendContainer.tag }}"
-          imagePullPolicy: {{ .Values.frontendContainer.imagePullPolicy }} # Set the imagePullPolicy here
+          imagePullPolicy: {{ .Values.frontendContainer.imagePullPolicy }}   
           ports:
             - containerPort: {{ .Values.frontendContainer.port }}
+          env:
+            {{- range $k, $v := .Values.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
