@@ -1,0 +1,44 @@
+{{- if and (eq .Values.listenerSet.allowedRoutes.namespaces.from "Selector") (not .Values.listenerSet.allowedRoutes.namespaces.selector) }}
+{{- fail "listenerSet.allowedRoutes.namespaces.selector is required for from=Selector" }}
+{{- end }}
+{{- if and .Values.listenerSet.http.enabled (eq .Values.listenerSet.listenerName .Values.listenerSet.http.listenerName) }}
+{{- fail "ListenerSet HTTP and HTTPS listener names must differ" }}
+{{- end }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: {{ include "wallet.listenerSetName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "wallet.labels" . | nindent 4 }}
+  {{- with .Values.listenerSet.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  parentRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: {{ include "wallet.gatewayName" . }}
+    namespace: {{ include "wallet.gatewayNamespace" . }}
+  listeners:
+    - name: {{ .Values.listenerSet.listenerName | quote }}
+      hostname: {{ include "wallet.hostname" . | quote }}
+      protocol: HTTPS
+      port: {{ .Values.listenerSet.port }}
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ""
+            kind: Secret
+            name: {{ include "wallet.tlsSecret" . }}
+      allowedRoutes:
+        {{- toYaml .Values.listenerSet.allowedRoutes | nindent 8 }}
+    {{- if .Values.listenerSet.http.enabled }}
+    - name: {{ .Values.listenerSet.http.listenerName | quote }}
+      hostname: {{ include "wallet.hostname" . | quote }}
+      protocol: HTTP
+      port: {{ .Values.listenerSet.http.port }}
+      allowedRoutes:
+        {{- toYaml .Values.listenerSet.allowedRoutes | nindent 8 }}
+    {{- end }}

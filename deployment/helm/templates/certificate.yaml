@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "wallet.name" . }}-tls
-  namespace: {{ include "wallet.gatewayNamespace" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   secretName: {{ include "wallet.tlsSecret" . }}
   dnsNames:

@@ -1,6 +1,6 @@
 {{- $reserved := list "KEYCLOAK_AUTH_URL" "KEYCLOAK_BASE_URL" "KEYCLOAK_REALM" "KEYCLOAK_CLIENT_ID" "NEXT_PUBLIC_API_URL" "NEXT_PUBLIC_ENV_URL" "NEXT_PUBLIC_API_URL_ACCOUNT_SERVICE" "WALLET_API_URL" "WALLET_ACCOUNT_SERVICE_URL" -}}
 {{- range $key, $value := .Values.env -}}
-{{- if has $key $reserved -}}{{ fail (printf "env.%s is generated; configure domain, tenantId or keycloak instead" $key) }}{{- end -}}
+{{- if has $key $reserved -}}{{ fail (printf "env.%s is generated; configure global.domain, global.tenantId or keycloak instead" $key) }}{{- end -}}
 {{- end }}
 apiVersion: apps/v1
 kind: Deployment

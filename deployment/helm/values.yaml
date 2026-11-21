@@ -1,4 +1,5 @@
-# Mandatory per installation: wallet hostname = <tenantId>.<domain>.
+# Shared wrapper inputs: wallet.<global.tenantId>.<global.domain>.
+# Keep these under global; there are no root domain/tenantId inputs.
 global:
   domain: example.org
   tenantId: demo
@@ -19,19 +20,27 @@ keycloak:
   subdomain: auth
   clientId: wallet-web
 
-# Created in the release namespace; GatewayClass must already exist.
+# Reference only: the central Gateway is managed outside this chart.
 gateway:
-  create: false
-  className: envoy
-  # Only when create=false: existing Gateway and its HTTPS listener.
-  name: "envoy-gateway"
-  namespace: "infrastructure"
-  sectionName: https
-  httpSectionName: http
+  name: envoy-gateway
+  namespace: infrastructure
+
+# Public exposure through an always-created tenant-owned ListenerSet.
+listenerSet:
+  listenerName: https
+  port: 443
+  annotations: {}
+  allowedRoutes:
+    namespaces:
+      from: Same
+  http:
+    enabled: false
+    listenerName: http
+    port: 80
 
 certificate:
   enabled: true
-  # Empty => release-specific secret. Created in the Gateway namespace.
+  # Empty => release-specific secret. Always in the release/ListenerSet namespace.
   secretName: ""
   issuerRef:
     name: letsencrypt

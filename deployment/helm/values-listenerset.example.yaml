@@ -1,0 +1,13 @@
+# Values for the chart itself; the ListenerSet is always created.
+global:
+  domain: example.org
+  tenantId: firma-a
+
+gateway:
+  name: envoy-gateway
+  namespace: infrastructure
+
+certificate:
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer

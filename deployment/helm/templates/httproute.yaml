@@ -4,9 +4,11 @@ metadata:
   name: {{ include "wallet.name" . }}
 spec:
   parentRefs:
-    - name: {{ include "wallet.gatewayName" . }}
-      namespace: {{ include "wallet.gatewayNamespace" . }}
-      sectionName: {{ .Values.gateway.sectionName }}
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
+      name: {{ include "wallet.listenerSetName" . }}
+      namespace: {{ .Release.Namespace }}
+      sectionName: {{ .Values.listenerSet.listenerName }}
   hostnames:
     - {{ include "wallet.hostname" . | quote }}
   rules:
@@ -26,6 +28,7 @@ spec:
       backendRefs:
         - name: {{ include "wallet.name" . }}-service
           port: {{ .Values.service.port }}
+{{- if .Values.listenerSet.http.enabled }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -33,9 +36,11 @@ metadata:
   name: {{ include "wallet.name" . }}-https-redirect
 spec:
   parentRefs:
-    - name: {{ include "wallet.gatewayName" . }}
-      namespace: {{ include "wallet.gatewayNamespace" . }}
-      sectionName: {{ .Values.gateway.httpSectionName }}
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
+      name: {{ include "wallet.listenerSetName" . }}
+      namespace: {{ .Release.Namespace }}
+      sectionName: {{ .Values.listenerSet.http.listenerName }}
   hostnames:
     - {{ include "wallet.hostname" . | quote }}
   rules:
@@ -43,5 +48,6 @@ spec:
         - type: RequestRedirect
           requestRedirect:
             scheme: https
-            port: 443
+            port: {{ .Values.listenerSet.port }}
             statusCode: 301
+{{- end }}

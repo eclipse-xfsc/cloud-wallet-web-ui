@@ -1,0 +1,9 @@
+# Root globals are shared with the dependency (replace wallet with its alias).
+global:
+  domain: example.org
+  tenantId: firma-a
+
+wallet:
+  gateway:
+    name: envoy-gateway
+    namespace: infrastructure

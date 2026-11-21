@@ -1,4 +1,5 @@
 apiVersion: v2
+description: Tenant wallet with ListenerSet routing on an existing Gateway and cert-manager
+  TLS
 name: web-ui
-description: Tenant wallet with Envoy Gateway routing and cert-manager TLS
-version: 0.3.0
+version: 0.5.1

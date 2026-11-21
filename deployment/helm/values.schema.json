@@ -2,7 +2,9 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "required": [
-    "global"
+    "global",
+    "gateway",
+    "listenerSet"
   ],
   "properties": {
     "keycloak": {
@@ -43,6 +45,57 @@
         "tenantId": {
           "type": "string",
           "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"
+        }
+      }
+    },
+    "listenerSet": {
+      "type": "object",
+      "properties": {
+        "enabled": false,
+        "listenerName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "allowedRoutes": {
+          "type": "object",
+          "properties": {
+            "namespaces": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "enum": [
+                    "Same",
+                    "All",
+                    "Selector"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parentRef": false
+      }
+    },
+    "gateway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "namespace"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }
