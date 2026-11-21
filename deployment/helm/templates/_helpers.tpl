@@ -1,5 +1,5 @@
 {{- define "wallet.hostname" -}}
-{{- printf "%s.%s" (required "tenantId is required" .Values.global.tenantId) (required "domain is required" .Values.global.domain) -}}
+{{- printf "wallet.%s.%s" (required "tenantId is required" .Values.global.tenantId) (required "domain is required" .Values.global.domain) -}}
 {{- end -}}
 {{- define "wallet.name" -}}{{ printf "%s-web-ui" .Release.Name | trunc 44 | trimSuffix "-" }}{{- end -}}
 {{- define "wallet.gatewayName" -}}
