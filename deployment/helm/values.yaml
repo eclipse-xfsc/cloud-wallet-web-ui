@@ -1,6 +1,6 @@
 # Mandatory per installation: wallet hostname = <tenantId>.<domain>.
-domain: ""
-tenantId: ""
+domain: example.org
+tenantId: demo
 replicaCount: 1
 service:
   type: ClusterIP
