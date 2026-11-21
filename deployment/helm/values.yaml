@@ -21,11 +21,11 @@ keycloak:
 
 # Created in the release namespace; GatewayClass must already exist.
 gateway:
-  create: true
-  className: eg
+  create: false
+  className: envoy
   # Only when create=false: existing Gateway and its HTTPS listener.
-  name: ""
-  namespace: ""
+  name: "envoy-gateway"
+  namespace: "infrastructure"
   sectionName: https
   httpSectionName: http
 
