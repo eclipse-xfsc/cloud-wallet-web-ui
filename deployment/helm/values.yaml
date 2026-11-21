@@ -36,7 +36,7 @@ certificate:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-    group: 
+    group: ''
 
 # Optional existing API gateway service in the release namespace.
 # Its /api path is forwarded unchanged. No API backend is deployed by this chart.
