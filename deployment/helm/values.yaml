@@ -1,6 +1,9 @@
 # Mandatory per installation: wallet hostname = <tenantId>.<domain>.
-domain: example.org
-tenantId: demo
+global:
+  domain: example.org
+  tenantId: demo
+
+
 replicaCount: 1
 service:
   type: ClusterIP
@@ -15,7 +18,6 @@ keycloak:
   # Empty authUrl => https://<subdomain>.<domain>; empty realm => tenantId.
   authUrl: ""
   subdomain: auth
-  realm: ""
   clientId: wallet-web
 
 # Created in the release namespace; GatewayClass must already exist.
