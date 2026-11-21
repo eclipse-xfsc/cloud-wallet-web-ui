@@ -1,7 +1,7 @@
 # Mandatory per installation: wallet hostname = <tenantId>.<domain>.
-
-domain: example.org
-tenantId: demo
+global:
+  domain: example.org
+  tenantId: demo
 
 replicaCount: 1
 service:
