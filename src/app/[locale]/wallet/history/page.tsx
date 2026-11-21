@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import Table, { type TableData } from '@/components/table/Table';
 import { useApiData } from '@/service/apiService';
@@ -20,7 +21,7 @@ const History = (): JSX.Element => {
   const [historyLength, setHistoryLength] = useState<number>(0);
   const { data, isLoading } = useApiData<HistoryData>(
     'historyList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/history/list`,
+    `${getRuntimeApiConfig().accountServiceUrl}/history/list`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
 

@@ -6,16 +6,15 @@ import useLogoutApi from '@/hooks/useLogoutApi';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import { AppContext } from '@/store/AppContextProvider';
-import { useQueryClient } from '@tanstack/react-query';
-import type { KeycloakAndMetadata } from '@/service/types';
+import { useAuthConfig } from '@/store/AuthConfigProvider';
 import { useLocale, useTranslations } from 'next-intl';
 import { useKeycloak } from '@react-keycloak/web';
 
 const AccountButton = (): JSX.Element => {
   const { keycloak } = useKeycloak();
-  const data = useQueryClient().getQueryData<KeycloakAndMetadata>(['keycloakConfigAndMetadata']);
+  const config = useAuthConfig();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [logOut] = useLogoutApi(data!.keycloakConfig, keycloak.token, keycloak.refreshToken);
+  const [logOut] = useLogoutApi(config!, keycloak.token, keycloak.refreshToken);
   const router = useRouter();
   const locale = useLocale();
   const { setError } = useContext(AppContext);
@@ -24,7 +23,7 @@ const AccountButton = (): JSX.Element => {
   const handleSignIn = (): void => {
     keycloak
       .login({
-        redirectUri: `${process.env.ENV_URL ?? 'http://localhost:3000'}/${locale}/wallet/credentials`,
+        redirectUri: `${window.location.origin}/${locale}/wallet`,
       })
       .catch(setError);
   };

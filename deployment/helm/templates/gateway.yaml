@@ -1,0 +1,28 @@
+{{- if .Values.gateway.create }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "wallet.gatewayName" . }}
+spec:
+  gatewayClassName: {{ .Values.gateway.className | quote }}
+  listeners:
+    - name: {{ .Values.gateway.httpSectionName }}
+      hostname: {{ include "wallet.hostname" . | quote }}
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: {{ .Values.gateway.sectionName }}
+      hostname: {{ include "wallet.hostname" . | quote }}
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: {{ include "wallet.tlsSecret" . }}
+      allowedRoutes:
+        namespaces:
+          from: Same
+{{- end }}

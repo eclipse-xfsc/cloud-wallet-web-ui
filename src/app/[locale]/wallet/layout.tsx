@@ -1,47 +1,47 @@
+import RuntimeApiScript from '@/components/wallet-ui/RuntimeApiScript';
+import AuthConfigProvider from '@/store/AuthConfigProvider';
+import { readRuntimeAuthConfig } from '@/service/runtimeAuthConfig';
 import '../../../scss/globals.scss';
+import '../../../scss/wallet-ui.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import css from './layout.module.scss';
-import WalletHeader from '@/components/header/WalletHeader';
-import WalletSideMenu from '@/components/side-menu/WalletSideMenu';
-
 import { WalletProvider } from '@/store/Provider';
-import { type Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
+import WalletNav from '@/components/wallet-ui/WalletNav';
 
-export const metadata: Metadata = {
-  title: 'Wallet',
-  icons: ['/images/favicon.ico'],
-};
-
-const WalletLayout = ({
+export const dynamic = 'force-dynamic';
+export const metadata = { title: 'XFSC Wallet', icons: ['/images/favicon.ico'] };
+export default function WalletLayout({
   children,
   params: { locale },
 }: {
   children: React.ReactNode;
   params: { locale: string };
-}): JSX.Element => {
+}): JSX.Element {
   const messages = useMessages();
-
+  const authConfig = readRuntimeAuthConfig();
   return (
     <html lang={locale}>
-      <body className={css.wrapper}>
-        <WalletProvider>
+      <head>
+        <RuntimeApiScript />
+      </head>
+      <body className="wallet-app">
+        <AuthConfigProvider config={authConfig}>
           <NextIntlClientProvider
             locale={locale}
             messages={messages}
           >
-            <WalletSideMenu />
-            <div className={`${css['content-wrapper']}`}>
-              <div className={css.content}>
-                <WalletHeader />
+            <WalletProvider>
+              <WalletNav />
+              <main
+                id="main-content"
+                className="wallet-width wallet-main"
+              >
                 {children}
-              </div>
-            </div>
+              </main>
+            </WalletProvider>
           </NextIntlClientProvider>
-        </WalletProvider>
+        </AuthConfigProvider>
       </body>
     </html>
   );
-};
-
-export default WalletLayout;
+}

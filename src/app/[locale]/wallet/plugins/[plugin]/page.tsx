@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { RemoteComponent } from '@/RemoteComponent';
 import LoadingSpinner from '@/components/loading-spinner/LoadingSpinner';
@@ -37,7 +38,7 @@ const Plugin = ({ params }: PluginProps): JSX.Element => {
   const fetchPluginData = (pluginDiscovery: IPlugin[], pluginRoute: string, metadata: Record<string, string>): void => {
     const foundPlugin = pluginDiscovery.find(plugin => plugin.route === pluginRoute);
 
-    const url = `${process.env.API_URL}/dynamic/plugins${foundPlugin?.url}/main.js`;
+    const url = `${getRuntimeApiConfig().apiUrl}/dynamic/plugins${foundPlugin?.url}/main.js`;
 
     setPluginComponent(
       <RemoteComponent

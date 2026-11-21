@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { Button, Container } from 'react-bootstrap';
 import Table, { type TableBody, type TableBodyMap, type TableData } from '@/components/table/Table';
@@ -33,7 +34,7 @@ const Backup = (): JSX.Element => {
   const [qrData, setQrData] = useState<QrCodeModalProps>();
   const { data, isLoading } = useApiData<BackupList>(
     'backupList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/backup/all`,
+    `${getRuntimeApiConfig().accountServiceUrl}/credentials/backup/all`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
 
@@ -65,7 +66,9 @@ const Backup = (): JSX.Element => {
         case 'download':
           setQrData({
             qrCode: await genericFetch<BackupQrCodeData>(
-              `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/backup/link/download?bindingId=${value.bindingId}`,
+              `${getRuntimeApiConfig().accountServiceUrl}/credentials/backup/link/download?bindingId=${
+                value.bindingId
+              }`,
               {
                 headers: {
                   Authorization: `Bearer ${keycloak.token}`,
@@ -79,7 +82,7 @@ const Backup = (): JSX.Element => {
           break;
         case 'delete':
           await genericFetch<BackupQrCodeData>(
-            `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/backup/${value.bindingId}`,
+            `${getRuntimeApiConfig().accountServiceUrl}/credentials/backup/${value.bindingId}`,
             {
               headers: { Authorization: `Bearer ${keycloak.token}` },
               method: 'DELETE',

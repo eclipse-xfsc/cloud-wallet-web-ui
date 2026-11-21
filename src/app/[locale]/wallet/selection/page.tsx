@@ -1,10 +1,12 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
 import Divider from '@/components/divider/Divider';
 import Table, { type TableBodyMap, type TableData } from '@/components/table/Table';
 import { useApiData } from '@/service/apiService';
 import type { PresentationDefinitionData } from '@/service/types';
-import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import css from './selection.module.scss';
@@ -13,10 +15,11 @@ import { useKeycloak } from '@react-keycloak/web';
 
 const Selection = (): JSX.Element => {
   const t = useTranslations('Presentation');
+  const locale = useLocale();
   const { keycloak } = useKeycloak();
   const { data: definitionData, isLoading: isLoadingDefinition } = useApiData<PresentationDefinitionData[]>(
     'presentationDefinitionList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/presentations/selection/all`,
+    `${getRuntimeApiConfig().accountServiceUrl}/presentations/selection/all`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
   const [rowData, setRowData] = useState<TableBodyMap>();
@@ -85,6 +88,11 @@ const Selection = (): JSX.Element => {
         </Col>
       </Row>
 
+      <div className="wallet-settings-links">
+        <Link href={`/${locale}/wallet/credentials`}>
+          {locale === 'de' ? 'Gespeicherte Nachweise ansehen' : 'View saved credentials'}
+        </Link>
+      </div>
       <Divider className="my-2" />
 
       {rowData?.get('select') ? (

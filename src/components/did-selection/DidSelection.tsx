@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { useApiData } from '@/service/apiService';
 import type { DidData } from '@/service/types';
@@ -17,7 +18,7 @@ const DidSelection = ({ getSelectedDID }: DidSelectionProps): JSX.Element => {
   const t = useTranslations('Presentation');
   const { keycloak } = useKeycloak();
   const [selectedDID, setSelectedDID] = useState<string>('');
-  const { data: didData } = useApiData<DidData>('didList', `${process.env.API_URL_ACCOUNT_SERVICE}/kms/did/list`, {
+  const { data: didData } = useApiData<DidData>('didList', `${getRuntimeApiConfig().accountServiceUrl}/kms/did/list`, {
     headers: { Authorization: `Bearer ${keycloak.token}` },
   });
   const router = useRouter();

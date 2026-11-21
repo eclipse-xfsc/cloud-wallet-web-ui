@@ -1,27 +1,47 @@
+# Mandatory per installation: wallet hostname = <tenantId>.<domain>.
+domain: ""
+tenantId: ""
+replicaCount: 1
 service:
   type: ClusterIP
-
+  port: 3000
 frontendContainer:
   image: node-654e3bca7fbeeed18f81d7c7.ps-xaas.io/pcm-cloud/web-ui
   imagePullPolicy: Always
   tag: main
   port: 3000
 
-env:
-  NEXT_PUBLIC_API_URL: "https://cloud-wallet.xfsc.dev/api"
-  NEXT_PUBLIC_ENV_URL: "https://cloud-wallet.xfsc.dev"
-  NEXT_PUBLIC_API_URL_ACCOUNT_SERVICE: "https://cloud-wallet.xfsc.dev/api/accounts"
-  NEXT_PUBLIC_API_URL_CONFIG_SERVICE: "https://cloud-wallet.xfsc.dev/api/configuration/configuration"
-  KEYCLOAK_BASE_URL: "https://auth.example.com"
-  KEYCLOAK_AUTH_URL: "https://auth.example.com"   # optional; sonst = BASE_URL
-  KEYCLOAK_REALM: "react-keycloak"
-  KEYCLOAK_CLIENT_ID: "react-keycloak"
+keycloak:
+  # Empty authUrl => https://<subdomain>.<domain>; empty realm => tenantId.
+  authUrl: ""
+  subdomain: auth
+  realm: ""
+  clientId: wallet-web
 
-ingress:
-  host: cloud-wallet.xfsc.dev
-  tls:
-    secretName: xfsc-wildcard 
-  annotations:
-     nginx.ingress.kubernetes.io/auth-type: basic
-     nginx.ingress.kubernetes.io/auth-secret: web-ui-basic-auth
-     nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+# Created in the release namespace; GatewayClass must already exist.
+gateway:
+  create: true
+  className: eg
+  # Only when create=false: existing Gateway and its HTTPS listener.
+  name: ""
+  namespace: ""
+  sectionName: https
+  httpSectionName: http
+
+certificate:
+  enabled: true
+  # Empty => release-specific secret. Created in the Gateway namespace.
+  secretName: ""
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+# Optional existing API gateway service in the release namespace.
+# Its /api path is forwarded unchanged. No API backend is deployed by this chart.
+api:
+  backendName: ""
+  backendPort: 8080
+
+# Additional environment variables; generated URL/auth keys are reserved.
+env: {}

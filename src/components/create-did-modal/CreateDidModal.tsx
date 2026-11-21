@@ -1,3 +1,4 @@
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 import { useApiData } from '@/service/apiService';
 import { useKeycloak } from '@react-keycloak/web';
 import { useTranslations } from 'next-intl';
@@ -15,7 +16,7 @@ const CreateDidModal = ({ show, handleClose, onSubmit }: CreateDidModalProps): J
   const { keycloak } = useKeycloak();
   const [selectedDID, setSelectedDID] = useState<string>('');
   const t = useTranslations('Did');
-  const { data } = useApiData<string[]>('keyTypes', `${process.env.API_URL_ACCOUNT_SERVICE}/kms/keyTypes`, {
+  const { data } = useApiData<string[]>('keyTypes', `${getRuntimeApiConfig().accountServiceUrl}/kms/keyTypes`, {
     headers: { Authorization: `Bearer ${keycloak.token}` },
   });
 

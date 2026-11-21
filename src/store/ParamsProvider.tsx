@@ -1,3 +1,4 @@
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 import PermissionRedirectModal from '@/components/permission-redirect-modal/PermissionRedirectModal';
 import { type Plugin } from '@/components/side-menu/WalletSideMenu';
 import { genericFetch } from '@/service/apiService';
@@ -61,7 +62,7 @@ const ParamsProvider = ({ children }: { children: React.ReactNode }): JSX.Elemen
 
     if (confirm && pluginParams) {
       genericFetch<any>(
-        `${process.env.API_URL}/dynamic/plugins/${pluginParams.plugin}/application/event/accounts.record`,
+        `${getRuntimeApiConfig().apiUrl}/dynamic/plugins/${pluginParams.plugin}/application/event/accounts.record`,
         {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,
@@ -87,7 +88,7 @@ const ParamsProvider = ({ children }: { children: React.ReactNode }): JSX.Elemen
   };
 
   const presentationSelection = async (presentationId: string): Promise<VerifiableCredentials[]> => {
-    return await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/presentations/selection/${presentationId}`, {
+    return await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/presentations/selection/${presentationId}`, {
       headers: {
         Authorization: `Bearer ${keycloak.token}`,
       },

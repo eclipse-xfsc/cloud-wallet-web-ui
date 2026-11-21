@@ -1,3 +1,4 @@
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 import { type Plugin } from '@/components/side-menu/WalletSideMenu';
 import { genericFetch } from '@/service/apiService';
 import type { DefaultConfig } from '@/service/types';
@@ -5,8 +6,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { AppContext } from './AppContextProvider';
-import { useLocale } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
 import { useKeycloak } from '@react-keycloak/web';
 
 interface DiscoveryContextProps {
@@ -15,15 +14,8 @@ interface DiscoveryContextProps {
 
 const DiscoveryContext = ({ children }: DiscoveryContextProps): JSX.Element => {
   const { keycloak } = useKeycloak();
-  const currentLocale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
   const queryClient = useQueryClient();
-  const {
-    data: configData,
-    isLoading: configIsLoading,
-    error: configError,
-  } = useQuery({
+  const { isLoading: configIsLoading, error: configError } = useQuery({
     queryKey: ['defaultConfig'],
     queryFn: getDefaultSettings,
   });
@@ -37,17 +29,8 @@ const DiscoveryContext = ({ children }: DiscoveryContextProps): JSX.Element => {
     if (configError) void setDefaultSettings();
   }, [configError]);
 
-  useEffect(() => {
-    if (!configData) return;
-
-    if (configData.language.toLocaleLowerCase() !== currentLocale) {
-      const newPathname = pathname.replace(/^\/[^/]+/, `/${configData.language.toLowerCase()}`);
-      router.push(newPathname);
-    }
-  }, [configData]);
-
   async function getPluginDiscovery(): Promise<Plugin[]> {
-    return await genericFetch<Plugin[]>(`${process.env.API_URL_ACCOUNT_SERVICE}/plugin-discovery`, {
+    return await genericFetch<Plugin[]>(`${getRuntimeApiConfig().accountServiceUrl}/plugin-discovery`, {
       headers: {
         Authorization: `Bearer ${keycloak.token}`,
       },
@@ -55,7 +38,7 @@ const DiscoveryContext = ({ children }: DiscoveryContextProps): JSX.Element => {
   }
 
   async function getDefaultSettings(): Promise<DefaultConfig> {
-    return await genericFetch<DefaultConfig>(`${process.env.API_URL_ACCOUNT_SERVICE}/configurations/list`, {
+    return await genericFetch<DefaultConfig>(`${getRuntimeApiConfig().accountServiceUrl}/configurations/list`, {
       headers: {
         Authorization: `Bearer ${keycloak.token}`,
       },
@@ -63,7 +46,7 @@ const DiscoveryContext = ({ children }: DiscoveryContextProps): JSX.Element => {
   }
 
   async function setDefaultSettings(): Promise<void> {
-    await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/configurations/save`, {
+    await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/configurations/save`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

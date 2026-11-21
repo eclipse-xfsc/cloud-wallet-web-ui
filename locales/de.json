@@ -110,7 +110,7 @@
     "user-id": "Benutzer-ID"
   },
   "Presentation": {
-    "title": "Präsentation",
+    "title": "Nachweis erbringen",
     "select-presentation": "Wählen Sie Präsentation",
     "drag-and-drop": "Ziehen Sie die Anmeldeinformationen per Drag-and-Drop nach rechts, um sie für die Präsentation auszuwählen.",
     "selected-credentials": "Ausgewählte Anmeldeinformationen",
@@ -137,7 +137,7 @@
     "backup-name-placeholder": "Geben Sie den Sicherungsnamen ein"
   },
   "History": {
-    "title": "Geschichte",
+    "title": "Historie",
     "length": "Zeige {length} von {total} Einträgen"
   },
   "Issuance": {
@@ -151,10 +151,10 @@
     "scan-qr": "Scannen Sie den QR-Code oder klicken Sie auf die Schaltfläche unten, um den Anmeldeinformationen-Link zu kopieren"
   },
   "Offering": {
-    "title": "Angebot",
+    "title": "Nachweis empfangen",
     "accept": "Akzeptieren",
     "deny": "Ablehnen",
-    "add": "Hinzufügen",
+    "add": "Nachweis hinzufügen",
     "offering-action-blocked": "Dieses Angebot wurde bereits akzeptiert oder abgelehnt",
     "offering-link": "Angebot-Link",
     "enter-offering": "Geben Sie den Angebotslink ein",
@@ -175,5 +175,57 @@
   },
   "Plugin": {
     "not-found": "Plugin nicht gefunden"
+  },
+  "SimpleWallet": {
+    "start": "Start",
+    "send": "Nachweis erbringen",
+    "receive": "Nachweis empfangen",
+    "history": "Historie",
+    "settings": "Einstellungen",
+    "navigation": "Wallet-Navigation",
+    "login": "Anmelden",
+    "eyebrow": "DIGITALE NACHWEISE",
+    "hero": "Ihre Nachweise. Sicher an einem Ort.",
+    "heroText": "Empfangen Sie digitale Nachweise und teilen Sie gezielt die Angaben, die benötigt werden.",
+    "loginWallet": "Zur Wallet anmelden",
+    "secureLogin": "Sichere Anmeldung über Ihre Organisation",
+    "preview": "Vorschau der Wallet",
+    "title": "Meine Wallet",
+    "sampleCredential": "Mitarbeiterausweis",
+    "sampleIssuer": "Beispiel GmbH",
+    "sampleLabel": "Beispielnachweis",
+    "overview": "Überblick behalten",
+    "receiveDescription": "Digitale Nachweise per Link hinzufügen.",
+    "sendDescription": "Vor dem Teilen prüfen, welche Angaben an welchen Empfänger gehen.",
+    "historyDescription": "Empfangene und geteilte Nachweise in Ihrer Historie nachvollziehen.",
+    "questions": "Noch Fragen?",
+    "questionCredential": "Was ist ein digitaler Nachweis?",
+    "answerCredential": "Ein digitaler Nachweis bestätigt beispielsweise Ihre Identität, eine Mitgliedschaft oder eine Qualifikation. Sie können ihn in Ihrer Wallet empfangen und bei Bedarf vorzeigen.",
+    "questionAccess": "Wie erhalte ich Zugang?",
+    "answerAccess": "Melden Sie sich mit dem Zugang Ihrer Organisation an. Wenn Sie noch keinen Zugang haben, wenden Sie sich an Ihre Organisation.",
+    "help": "Hilfe",
+    "about": "Über XFSC",
+    "subtitle": "Nachweise sicher empfangen und teilen.",
+    "actions": "Was möchten Sie tun?",
+    "sendText": "Wählen Sie eine Anfrage und teilen Sie gezielt Ihre Daten.",
+    "receiveText": "Fügen Sie einen Nachweis über einen Angebotslink hinzu.",
+    "pending": "{count, plural, one {Ein Nachweis wartet auf Ihre Annahme} other {# Nachweise warten auf Ihre Annahme}}",
+    "pendingText": "Prüfen Sie Aussteller und Inhalt, bevor Sie den Nachweis annehmen.",
+    "review": "Jetzt prüfen",
+    "recent": "Letzte Aktivitäten",
+    "allHistory": "Gesamte Historie",
+    "loading": "Aktivitäten werden geladen …",
+    "historyError": "Die Aktivitäten konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "noHistory": "Noch keine Aktivitäten. Sobald Sie Nachweise empfangen oder teilen, erscheinen sie hier.",
+    "offersError": "Offene Nachweise konnten nicht geladen werden.",
+    "control": "Sie entscheiden, welche Daten Sie teilen.",
+    "advanced": "Weitere Einstellungen",
+    "pairing-management": "Geräte",
+    "backup": "Sicherung",
+    "did": "Identitäten",
+    "plugin-overview": "Integrationen",
+    "loginPending": "Anmeldung wird geöffnet …",
+    "loginFailed": "Die Anmeldung konnte nicht gestartet werden. Bitte prüfen Sie die Verbindung und Auth-Konfiguration und versuchen Sie es erneut."
   }
 }

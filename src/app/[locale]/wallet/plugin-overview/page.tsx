@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import DetailsModal from '@/components/details-modal/DetailsModal';
 import Table, { type TableBodyMap, type TableData } from '@/components/table/Table';
@@ -81,7 +82,8 @@ const PluginOverview = (): JSX.Element => {
         <DetailsModal
           show={showModal}
           handleClose={handleCloseModal}
-          data={`${process.env.API_URL}/dynamic/plugins${rowData.get('see-details')?.url}/application/metadata`}
+          data={`${getRuntimeApiConfig().apiUrl}/dynamic/plugins${rowData.get('see-details')
+            ?.url}/application/metadata`}
           title={t('plugin-details')}
         />
       )}

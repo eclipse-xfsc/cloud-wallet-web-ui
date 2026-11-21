@@ -1,17 +1,11 @@
-import type { KeycloakConfig } from '@/service/types';
+import { readRuntimeAuthConfig } from '@/service/runtimeAuthConfig';
 
-export function GET(req: Request, res: Response): Response {
-  return new Response(
-    JSON.stringify({
-      baseUrl: process.env.KEYCLOAK_BASE_URL ?? 'http://localhost:8081',
-      auth: process.env.KEYCLOAK_AUTH_URL ?? process.env.KEYCLOAK_BASE_URL ?? 'http://localhost:8081',
-      realm: process.env.KEYCLOAK_REALM ?? 'react-keycloak',
-      clientId: process.env.KEYCLOAK_CLIENT_ID ?? 'react-keycloak',
-    } satisfies KeycloakConfig),
-    {
-      headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
-    }
-  );
+// Compatibility endpoint. The UI receives these values in its initial server render.
+export const dynamic = 'force-dynamic';
+export function GET(): Response {
+  const config = readRuntimeAuthConfig();
+  return Response.json(config ?? { error: 'Missing or invalid Keycloak configuration.' }, {
+    status: config ? 200 : 503,
+    headers: { 'Cache-Control': 'no-store' },
+  });
 }

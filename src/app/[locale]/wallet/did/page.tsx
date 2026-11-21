@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { Button, Container } from 'react-bootstrap';
 import Table, { type TableData } from '@/components/table/Table';
@@ -20,9 +21,13 @@ const Did = (): JSX.Element => {
   const [tableData, setTableData] = useState<TableData>();
   const [showModal, setShowModal] = useState(false);
   const queryClient = useQueryClient();
-  const { data, isLoading } = useApiData<DidData>('didList', `${process.env.API_URL_ACCOUNT_SERVICE}/kms/did/list`, {
-    headers: { Authorization: `Bearer ${keycloak.token}` },
-  });
+  const { data, isLoading } = useApiData<DidData>(
+    'didList',
+    `${getRuntimeApiConfig().accountServiceUrl}/kms/did/list`,
+    {
+      headers: { Authorization: `Bearer ${keycloak.token}` },
+    }
+  );
 
   useEffect(() => {
     if (!data?.list.length) return;
@@ -40,7 +45,7 @@ const Did = (): JSX.Element => {
 
   const handleCreateDidOnSubmit = (keyType: string): void => {
     const createDid = async (): Promise<void> => {
-      await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/kms/did/create`, {
+      await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/kms/did/create`, {
         headers: { Authorization: `Bearer ${keycloak.token}` },
         body: JSON.stringify({ keyType }),
         method: 'POST',

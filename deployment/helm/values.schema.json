@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "domain",
+    "tenantId"
+  ],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "maxLength": 189,
+      "pattern": "^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]([a-z0-9-]{0,61}[a-z0-9])?$"
+    },
+    "tenantId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"
+    },
+    "keycloak": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subdomain": {
+          "type": "string",
+          "pattern": "^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 import { genericFetch } from '@/service/apiService';
 import type { BackupUpload } from '@/service/types';
 import { AppContext } from '@/store/AppContextProvider';
@@ -41,7 +42,7 @@ const AddBackupModal = ({ show, handleClose }: BackupModalProps): JSX.Element =>
 
     const getQrCode = async (): Promise<BackupUpload> => {
       return await genericFetch<BackupUpload>(
-        `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/backup/link/upload?name=${formData.name}`,
+        `${getRuntimeApiConfig().accountServiceUrl}/credentials/backup/link/upload?name=${formData.name}`,
         {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,

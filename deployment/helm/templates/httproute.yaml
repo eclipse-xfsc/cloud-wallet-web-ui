@@ -1,0 +1,47 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "wallet.name" . }}
+spec:
+  parentRefs:
+    - name: {{ include "wallet.gatewayName" . }}
+      namespace: {{ include "wallet.gatewayNamespace" . }}
+      sectionName: {{ .Values.gateway.sectionName }}
+  hostnames:
+    - {{ include "wallet.hostname" . | quote }}
+  rules:
+    {{- if .Values.api.backendName }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: {{ .Values.api.backendName }}
+          port: {{ .Values.api.backendPort }}
+    {{- end }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ include "wallet.name" . }}-service
+          port: {{ .Values.service.port }}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ include "wallet.name" . }}-https-redirect
+spec:
+  parentRefs:
+    - name: {{ include "wallet.gatewayName" . }}
+      namespace: {{ include "wallet.gatewayNamespace" . }}
+      sectionName: {{ .Values.gateway.httpSectionName }}
+  hostnames:
+    - {{ include "wallet.hostname" . | quote }}
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            port: 443
+            statusCode: 301

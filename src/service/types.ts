@@ -84,6 +84,7 @@ export interface CredentialsData {
 }
 
 export interface KeycloakConfig {
+  mock?: boolean;
   baseUrl: string;
   realm: string;
   clientId: string;

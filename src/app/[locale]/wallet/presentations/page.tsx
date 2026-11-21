@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import css from './presentations.module.scss';
@@ -43,7 +44,7 @@ const Presentations = (): JSX.Element => {
   const { keycloak } = useKeycloak();
   const { data, isLoading } = useApiData<VerifiablePresentation[]>(
     'presentationList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/presentations/list`,
+    `${getRuntimeApiConfig().accountServiceUrl}/presentations/list`,
     { headers: { Authorization: `Bearer ${keycloak.token}` }, method: 'POST' }
   );
   const t = useTranslations('PresentationsList');

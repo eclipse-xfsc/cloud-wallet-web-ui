@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import QrModal from '@/components/qr-modal/QrModal';
 import Table, { type TableBody, type TableBodyMap, type TableData } from '@/components/table/Table';
@@ -29,7 +30,7 @@ const PairingManagement = (): JSX.Element => {
   const [qrCode, setQrCode] = useState('');
   const { data, isLoading } = useApiData<DevicesData[]>(
     'devicesList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/devices/list`,
+    `${getRuntimeApiConfig().accountServiceUrl}/devices/list`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
 
@@ -63,7 +64,7 @@ const PairingManagement = (): JSX.Element => {
           setShowSeeDetails(true);
           break;
         case 'block':
-          await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/devices/block/${value.id}`, {
+          await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/devices/block/${value.id}`, {
             headers: { Authorization: `Bearer ${keycloak.token}` },
             method: 'POST',
           })
@@ -74,7 +75,7 @@ const PairingManagement = (): JSX.Element => {
             .catch(setError);
           break;
         case 'delete':
-          await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/devices/${value.id}`, {
+          await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/devices/${value.id}`, {
             headers: { Authorization: `Bearer ${keycloak.token}` },
             method: 'DELETE',
           })
@@ -93,7 +94,7 @@ const PairingManagement = (): JSX.Element => {
   }, [rowData]);
 
   const handleQrCodeClick = (): void => {
-    genericFetch<string>(`${process.env.API_URL_ACCOUNT_SERVICE}/devices/link`, {
+    genericFetch<string>(`${getRuntimeApiConfig().accountServiceUrl}/devices/link`, {
       headers: {
         Authorization: `Bearer ${keycloak.token}`,
       },

@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import { useLocale, useTranslations } from 'next-intl';
 import css from './issuance.module.scss';
@@ -27,7 +28,7 @@ const Issuance = (): JSX.Element => {
   const [credentialOfferLink, setCredentialOfferLink] = useState('');
   const { data, isLoading } = useApiData<IssuanceData[]>(
     'schemaList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/schemas`,
+    `${getRuntimeApiConfig().accountServiceUrl}/credentials/schemas`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
 
@@ -101,7 +102,7 @@ const Issuance = (): JSX.Element => {
     event.preventDefault();
 
     const getIssuedLink = async (): Promise<CredentialOffer> => {
-      return await genericFetch<CredentialOffer>(`${process.env.API_URL_ACCOUNT_SERVICE}/credentials/issue`, {
+      return await genericFetch<CredentialOffer>(`${getRuntimeApiConfig().accountServiceUrl}/credentials/issue`, {
         headers: { Authorization: `Bearer ${keycloak.token}` },
         body: JSON.stringify({
           payload: {

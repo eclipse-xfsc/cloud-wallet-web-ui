@@ -1,4 +1,4 @@
 apiVersion: v2
 name: web-ui
-description: A Helm chart for deploying a web UI application
-version: 0.2.1
+description: Tenant wallet with Envoy Gateway routing and cert-manager TLS
+version: 0.3.0

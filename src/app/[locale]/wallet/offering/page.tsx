@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import AcceptDenyOfferingModal from '@/components/accept-offering-modal/AcceptOfferingModal';
 import OfferingModal, { type OfferingLinkData } from '@/components/offering-modal/OfferingModal';
@@ -38,7 +39,7 @@ const Offering = (): JSX.Element => {
   const [isAccepting, setIsAccepting] = useState(false);
   const { data, isLoading } = useApiData<OfferingData[]>(
     'offeringList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/offers/list`,
+    `${getRuntimeApiConfig().accountServiceUrl}/credentials/offers/list`,
     { headers: { Authorization: `Bearer ${keycloak.token}` } }
   );
 
@@ -104,7 +105,7 @@ const Offering = (): JSX.Element => {
   }, [rowData]);
 
   const handleDenyOffering = async (value: TableBody): Promise<void> => {
-    await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/credentials/offers/${value?.requestId}/deny`, {
+    await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/credentials/offers/${value?.requestId}/deny`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${keycloak.token}` },
       body: JSON.stringify({ keyId: '' }),
@@ -118,7 +119,7 @@ const Offering = (): JSX.Element => {
 
   const handleCreateOnSubmit = (data: OfferingLinkData): void => {
     const offerLink = async (): Promise<void> => {
-      await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/credentials/offers/create`, {
+      await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/credentials/offers/create`, {
         headers: { Authorization: `Bearer ${keycloak.token}` },
         body: JSON.stringify({ credential_offer: data.offeringLink }),
         method: 'PUT',
@@ -139,7 +140,7 @@ const Offering = (): JSX.Element => {
     const acceptOffering = async (): Promise<void> => {
       setIsAccepting(true);
 
-      await genericFetch(`${process.env.API_URL_ACCOUNT_SERVICE}/credentials/offers/${value?.requestId}/accept`, {
+      await genericFetch(`${getRuntimeApiConfig().accountServiceUrl}/credentials/offers/${value?.requestId}/accept`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${keycloak.token}` },
         body: JSON.stringify({ keyId: did }),

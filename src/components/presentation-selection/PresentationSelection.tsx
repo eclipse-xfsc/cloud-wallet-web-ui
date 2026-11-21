@@ -1,3 +1,4 @@
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CredentialColumn from '../credential-column/CredentialColumn';
 import css from './PresentationSelection.module.scss';
@@ -62,7 +63,7 @@ const PresentationSelection = ({ presentationDefinition }: PresentationSelection
   useEffect(() => {
     const presentationSelection = async (): Promise<VerifiableCredentials[]> => {
       return await genericFetch(
-        `${process.env.API_URL_ACCOUNT_SERVICE}/presentations/selection/${presentationDefinition.id}`,
+        `${getRuntimeApiConfig().accountServiceUrl}/presentations/selection/${presentationDefinition.id}`,
         {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,
@@ -88,7 +89,7 @@ const PresentationSelection = ({ presentationDefinition }: PresentationSelection
   const handleTransmitPresentation = (): void => {
     const transmitPresentation = async (): Promise<any> => {
       return await genericFetch(
-        `${process.env.API_URL_ACCOUNT_SERVICE}/presentations/proof/${presentationDefinition.id}`,
+        `${getRuntimeApiConfig().accountServiceUrl}/presentations/proof/${presentationDefinition.id}`,
         {
           headers: {
             Authorization: `Bearer ${keycloak.token}`,

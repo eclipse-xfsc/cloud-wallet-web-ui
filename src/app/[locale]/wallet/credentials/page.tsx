@@ -1,4 +1,5 @@
 'use client';
+import { getRuntimeApiConfig } from '@/service/runtimeApiConfig';
 
 import CredentialColumn from '@/components/credential-column/CredentialColumn';
 import Divider from '@/components/divider/Divider';
@@ -26,7 +27,7 @@ const Wallet = (): JSX.Element => {
   const { keycloak } = useKeycloak();
   const { data, isLoading } = useApiData<CodedVerifiableCredentials[]>(
     'credentialList',
-    `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/list`,
+    `${getRuntimeApiConfig().accountServiceUrl}/credentials/list`,
     {
       headers: { Authorization: `Bearer ${keycloak.token}` },
       body: JSON.stringify({ search: '' }),
@@ -86,7 +87,7 @@ const Wallet = (): JSX.Element => {
   const handleOnSearch = debounce((searchValue: string): void => {
     const getFilteredCredentials = async (): Promise<CodedVerifiableCredentials[]> => {
       return await genericFetch<CodedVerifiableCredentials[]>(
-        `${process.env.API_URL_ACCOUNT_SERVICE}/credentials/list`,
+        `${getRuntimeApiConfig().accountServiceUrl}/credentials/list`,
         {
           headers: { Authorization: `Bearer ${keycloak.token}` },
           body: JSON.stringify({ search: searchValue }),
