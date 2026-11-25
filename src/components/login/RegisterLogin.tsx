@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak, { type KeycloakError } from 'keycloak-js';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import Keycloak from 'keycloak-js';
+import { useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/store/AppContextProvider';
 import { useAuthConfig } from '@/store/AuthConfigProvider';
 import LoadingSpinner from '../loading-spinner/LoadingSpinner';
@@ -13,12 +13,16 @@ const RegisterLogin = ({ children }: { children: React.ReactNode }): JSX.Element
   const t = useTranslations('SimpleWallet');
   const { setError } = useContext(AppContext);
   const [keycloak, setKeycloak] = useState<Keycloak>();
-  const handleError = useCallback(
-    (error: KeycloakError) => {
-      setError(Error(error.error_description));
-    },
-    [setError]
-  );
+  const debug = process.env.NEXT_PUBLIC_LOCAL_LOGIN_DEBUG === 'true';
+  const auth = config?.auth;
+  const realm = config?.realm;
+  const clientId = config?.clientId;
+
+  useEffect(() => {
+    if (!debug) return;
+    console.info('[RegisterLogin] MOUNT');
+    return () => console.info('[RegisterLogin] UNMOUNT');
+  }, [debug]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -35,11 +39,11 @@ const RegisterLogin = ({ children }: { children: React.ReactNode }): JSX.Element
   }, [setError]);
 
   useEffect(() => {
-    if (!config) return;
-    const kc = new Keycloak({ url: config.auth, realm: config.realm, clientId: config.clientId });
-    kc.onAuthError = handleError;
+    if (!auth || !realm || !clientId) return;
+    if (debug) console.count('[Keycloak] Creating instance');
+    const kc = new Keycloak({ url: auth, realm, clientId });
     setKeycloak(kc);
-  }, [config, handleError]);
+  }, [auth, realm, clientId, debug]);
 
   if (!config)
     return (
@@ -53,7 +57,31 @@ const RegisterLogin = ({ children }: { children: React.ReactNode }): JSX.Element
   return keycloak ? (
     <ReactKeycloakProvider
       authClient={keycloak}
-      initOptions={{ checkLoginIframe: false, pkceMethod: 'S256', flow: 'standard' }}
+      initOptions={{
+        checkLoginIframe: false, pkceMethod: 'S256', flow: 'standard',
+        ...(debug ? { onLoad: 'check-sso' as const, responseMode: 'fragment' as const, enableLogging: true } : {}),
+      }}
+     onEvent={(event, error) => {
+        console.log('[Keycloak Event]', event);
+
+        if (event === 'onInitError') {
+          console.error('[Keycloak Init Error]', error);
+          console.error('[Keycloak Init Error Details]', {
+            message: error?.message,
+            stack: error?.stack,
+            error: error?.error,
+            errorDescription: error?.error_description,
+          });
+
+          debugger;
+        }
+      }}
+      onTokens={tokens => {
+        if (debug) console.info('[Keycloak Tokens]', {
+          hasAccessToken: !!tokens.token, hasRefreshToken: !!tokens.refreshToken,
+          hasIdToken: !!tokens.idToken,
+        });
+      }}
       LoadingComponent={<LoadingSpinner />}
     >
       {children}
